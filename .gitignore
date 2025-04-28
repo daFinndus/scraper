@@ -1,0 +1,3 @@
+# Exclude virtual environment
+venv
+.venv
