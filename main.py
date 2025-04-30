@@ -1,6 +1,8 @@
 from flask import Flask, jsonify
 from bs4 import BeautifulSoup
+from threading import Thread
 from waitress import serve
+from time import sleep
 import requests
 
 app = Flask(__name__)
@@ -23,12 +25,26 @@ def scrape():
             dish_name_div = menu.find("div", class_="menu_name menu_name_kleiner")
             price_div = menu.find("div", class_="menu_preis")
 
+            # Extracting dish name, price and other details
+            details = menu.get("data-arten").strip().upper() if menu.has_attr("data-arten") else "No details"
             dish_name = dish_name_div.text.strip() if dish_name_div else "No dish name"
             prices = price_div.text.strip() if price_div else "No price"
 
+            vegan = True if "|VN|" in details else False
+            vegetarian = True if "|VE|" in details else False
+            pork = True if "|S|" in details else False
+            beef = True if "|R|" in details else False
+            alcohol = True if "|A|" in details else False
+
             dishes.append({
                 "dish": dish_name,
-                "prices": prices
+                "prices": prices,
+                "vegan": vegan,
+                "vegetarian": vegetarian,
+                "pork": pork,
+                "beef": beef,
+                "alcohol": alcohol,
+                "details": details
             })
 
         data[date] = dishes
@@ -42,5 +58,25 @@ def index():
     return jsonify(menu)
 
 
+# This function is to ping the backend every 5 minutes so spindown does not occur
+def ping():
+    url = "https://scraper-usrk.onrender.com/"
+
+    while True:
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                print("Ping successful!")
+            else:
+                print("Ping failed.")
+        except requests.exceptions.RequestException:
+            print(f"Error while requesting the service.")
+        finally:
+            sleep(300)
+
+
 if __name__ == '__main__':
+    thread = Thread(target=ping)
+    thread.start()
+
     serve(app, host="0.0.0.0", port=8080)
