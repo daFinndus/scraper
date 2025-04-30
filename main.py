@@ -21,29 +21,45 @@ def scrape():
         menus = day.find_all("div", class_="mensa_menu_detail")
 
         dishes = []
+
         for menu in menus:
             dish_name_div = menu.find("div", class_="menu_name menu_name_kleiner")
             price_div = menu.find("div", class_="menu_preis")
 
             # Extracting dish name, price and other details
-            details = menu.get("data-arten").strip().upper() if menu.has_attr("data-arten") else "No details"
+            details_data = menu.get("data-arten").strip().upper() if menu.has_attr("data-arten") else "No details"
             dish_name = dish_name_div.text.strip() if dish_name_div else "No dish name"
-            prices = price_div.text.strip() if price_div else "No price"
+            price_data = price_div.text.strip() if price_div else "No price"
 
-            vegan = True if "|VN|" in details else False
-            vegetarian = True if "|VE|" in details else False
-            pork = True if "|S|" in details else False
-            beef = True if "|R|" in details else False
-            alcohol = True if "|A|" in details else False
+            # This will scrape the prices
+            student = price_data.split("/")[0].strip() if price_data else "No price"
+            staff = price_data.split("/")[1].strip() if len(price_data.split("/")) > 1 else "No staff price"
+            guest = price_data.split("/")[2].strip() if len(price_data.split("/")) > 2 else "No guest price"
 
-            dishes.append({
-                "dish": dish_name,
-                "prices": prices,
+            prices = {
+                "student": student,
+                "staff": staff,
+                "guest": guest
+            }
+
+            # This will scrape necessary details
+            vegan = True if "|VN|" in details_data else False
+            vegetarian = True if "|VE|" in details_data else False
+            pork = True if "|S|" in details_data else False
+            beef = True if "|R|" in details_data else False
+            alcohol = True if "|A|" in details_data else False
+
+            details = {
                 "vegan": vegan,
                 "vegetarian": vegetarian,
                 "pork": pork,
                 "beef": beef,
-                "alcohol": alcohol,
+                "alcohol": alcohol
+            }
+
+            dishes.append({
+                "dish": dish_name,
+                "prices": prices,
                 "details": details
             })
 
