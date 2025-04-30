@@ -43,11 +43,11 @@ def scrape():
             }
 
             # This will scrape necessary details
-            vegan = True if "|VN|" in details_data else False
-            vegetarian = True if "|VE|" in details_data else False
-            pork = True if "|S|" in details_data else False
-            beef = True if "|R|" in details_data else False
-            alcohol = True if "|A|" in details_data else False
+            vegan = True if "VN" in details_data else False
+            vegetarian = True if "VE" in details_data else False
+            pork = True if "S" in details_data else False
+            beef = True if "R" in details_data else False
+            alcohol = True if "A" in details_data else False
 
             details = {
                 "vegan": vegan,
