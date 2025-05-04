@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from bs4 import BeautifulSoup
+from datetime import datetime
 from threading import Thread
 from waitress import serve
 from time import sleep
@@ -14,10 +15,12 @@ def scrape():
     soup = BeautifulSoup(page.content, 'html.parser')
 
     data = {}
-
     days = soup.find_all("div", class_="tag_headline")
+
     for day in days:
         date = day.get("data-day")
+        weekday = datetime.date(datetime.strptime(date, "%Y-%m-%d")).strftime("%A")
+
         menus = day.find_all("div", class_="mensa_menu_detail")
 
         dishes = []
@@ -63,7 +66,11 @@ def scrape():
                 "details": details
             })
 
-        data[date] = dishes
+        # This will scrape the date
+        data[date] = {
+            "weekday": weekday,
+            "dishes": dishes
+        }
 
     return data
 
@@ -95,4 +102,4 @@ if __name__ == '__main__':
     thread = Thread(target=ping)
     thread.start()
 
-    serve(app, host="0.0.0.0", port=8080)
+    serve(app, host="0.0.0.0", port=8000)
