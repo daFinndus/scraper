@@ -47,24 +47,37 @@ def scrape():
             }
 
             # This will scrape the necessary details
-            vegan = True if "VN" in details_data else False
-            vegetarian = True if "VE" in details_data else False
-            pork = True if "S" in details_data else False
-            beef = True if "R" in details_data else False
-            alcohol = True if "A" in details_data else False
+            vegan = True if "|VN|" in details_data else False
+            vegetarian = True if "|VE|" in details_data else False
+            pork = True if "|S|" in details_data else False
+            beef = True if "|R|" in details_data else False
+            chicken = True if "|G|" in details_data else False
+            alcohol = True if "|A|" in details_data else False
 
-            details = {
+            contains = {
                 "vegan": vegan,
                 "vegetarian": vegetarian,
                 "pork": pork,
                 "beef": beef,
-                "alcohol": alcohol
+                "chicken": chicken,
+                "alcohol": alcohol,
+            }
+
+            streetfood = True if "|STF|" in details_data else False
+            greenplate = True if "|GPC|" in details_data else False
+            studentrecipe = True if "|PK|" in details_data else False
+
+            awards = {
+                "streetfood": streetfood,
+                "greenplate": greenplate,
+                "studentrecipe": studentrecipe
             }
 
             dishes.append({
                 "dish": dish_name,
                 "prices": prices,
-                "details": details
+                "contains": contains,
+                "awards": awards
             })
 
         # This will scrape the date
