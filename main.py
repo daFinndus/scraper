@@ -9,6 +9,7 @@ import requests
 app = Flask(__name__)
 
 
+# This function scrapes the menu from the website
 def scrape():
     url = "https://studentenwerk.sh/de/mensaplandruck?ort=1&mensa=5&aus=2"
     page = requests.get(url)
@@ -31,7 +32,7 @@ def scrape():
 
             # Extracting dish name, price and other details
             details_data = menu.get("data-arten").strip().upper() if menu.has_attr("data-arten") else "No details"
-            dish_name = dish_name_div.text.strip() if dish_name_div else "No dish name"
+            dish_name = ' '.join(dish_name_div.text.strip().split()) if dish_name_div else "No dish name"
             price_data = price_div.text.strip() if price_div else "No price"
 
             # This will scrape the prices
@@ -45,7 +46,7 @@ def scrape():
                 "guest": guest
             }
 
-            # This will scrape necessary details
+            # This will scrape the necessary details
             vegan = True if "VN" in details_data else False
             vegetarian = True if "VE" in details_data else False
             pork = True if "S" in details_data else False
