@@ -80,40 +80,145 @@ def scrape():
                 "awards": awards
             })
 
+        # Also add the currywurst, which is always available
+        currywurst = {
+            "dish": "Currywurst mit Pommes",
+            "prices": {
+                "student": "2,80€",
+                "staff": "3,20€",
+                "guest": "3,50€"
+            },
+            "contains": {
+                "vegan": False,
+                "vegetarian": False,
+                "pork": True,
+                "beef": False,
+                "chicken": False,
+                "alcohol": False
+            },
+            "awards": {
+                "streetfood": True,
+                "greenplate": False,
+                "studentrecipe": False
+            }
+        }
+
+        # These are all available drinks of the canteen
+        drinks = {
+            "Warmgetränke": {
+                "Cappuccino": "2,10 €",
+                "Café Crema": "2,10 €",
+                "Filterkaffee": "1,40 €",
+                "Milchkaffee": "2,10 €",
+                "Latte Machhiato": "2,10 €",
+                "Espresso": "1,50 €",
+                "Heiße Schokolade": "1,70 €",
+                "Tee": "1,40 €",
+                "Heißes Wasser": "0,50 €",
+            },
+            "Kaltgetränke": {
+                "Waterkant Sturmflut (0.5 L)": "1,10 €",
+                "Waterkant Ebbe (0.5 L)": "1,10 €",
+                "Fritz Getränke (0.33 L)": "2,00 €",
+                "Waysa Green Original (0.33 L)": "2,00 €",
+                "Waysa White Apple (0.33 L)": "2,50 €",
+                "Erdinger Hefe Alkoholfrei (0.33 L)": "2,40 €",
+                "Wittenseer Blutorange (0.5 L)": "1,95 €",
+                "Flora Power Mate (0.5 L)": "2,50 €",
+                "Sinalco Getränke (0.5 L)": "1,55 €",
+                "Sprottenwasser (0.75 L)": "0.85 €",
+                "Mio Mio Getränke (0.5 L)": "1,90 € zz. Pfand (0.15 €)",
+                "AiTea Pfirsisch oder Zitrone (0.5 L)": "3,30 €",
+            }
+        }
+
+        dessert = {
+            "Schokopudding mit Vanillesoße": "1,70 €",
+            "Vanille Joghurt": "2,20 €",
+            "Erdbeer-Fruchtjoghurt": "2,00 €",
+            "Milchreis": "2,10 €",
+            "Milchreis mit Roter Grütze": "2,30 €",
+            "Chiasamen-Kokos-Pudding": "2,30 €",
+            "Frischer Obstsalat": "2,60 €",
+            "Götterspeise Waldmeister oder Kirsche": {
+                "prices": {
+                    "student": "1,40 €",
+                    "staff": "1,80 €",
+                    "guest": "2,10 €"
+                }
+            },
+            "Salted Caramel Pudding": {
+                "prices": {
+                    "student": "1,40 €",
+                    "staff": "1,80 €",
+                    "guest": "2,10 €"
+                },
+                "contains": {
+                    "vegan": True,
+                },
+            },
+            "Schokopudding": {
+                "prices": {
+                    "student": "1,40 €",
+                    "staff": "1,80 €",
+                    "guest": "2,10 €"
+                },
+                "contains": {
+                    "vegan": True,
+                },
+            },
+            "Fruchtdessert Erdbeere": {
+                "prices": {
+                    "student": "1,40 €",
+                    "staff": "1,80 €",
+                    "guest": "2,10 €"
+                },
+            },
+            "Sahnepudding Cheesecake": {
+                "prices": {
+                    "student": "1,40 €",
+                    "staff": "1,80 €",
+                    "guest": "2,10 €"
+                },
+            }
+        }
+
         # This will scrape the date
         data[date] = {
             "weekday": weekday,
-            "dishes": dishes
+            "dishes": dishes,
+            "everyday": {
+                currywurst,
+                drinks,
+                dessert
+            }
         }
 
-    return data
+        return data
 
+    @app.route('/', methods=['GET'])
+    def index():
+        menu = scrape()
+        return jsonify(menu)
 
-@app.route('/', methods=['GET'])
-def index():
-    menu = scrape()
-    return jsonify(menu)
+    # This function is to ping the backend every 5 minutes so spindown does not occur
+    def ping():
+        url = "https://scraper-usrk.onrender.com/"
 
+        while True:
+            try:
+                response = requests.get(url)
+                if response.status_code == 200:
+                    print("Ping successful!")
+                else:
+                    print("Ping failed.")
+            except requests.exceptions.RequestException:
+                print(f"Error while requesting the service.")
+            finally:
+                sleep(300)
 
-# This function is to ping the backend every 5 minutes so spindown does not occur
-def ping():
-    url = "https://scraper-usrk.onrender.com/"
+    if __name__ == '__main__':
+        thread = Thread(target=ping)
+        thread.start()
 
-    while True:
-        try:
-            response = requests.get(url)
-            if response.status_code == 200:
-                print("Ping successful!")
-            else:
-                print("Ping failed.")
-        except requests.exceptions.RequestException:
-            print(f"Error while requesting the service.")
-        finally:
-            sleep(300)
-
-
-if __name__ == '__main__':
-    thread = Thread(target=ping)
-    thread.start()
-
-    serve(app, host="0.0.0.0", port=8000)
+        serve(app, host="0.0.0.0", port=8000)
