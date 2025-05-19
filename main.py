@@ -188,37 +188,40 @@ def scrape():
             "weekday": weekday,
             "dishes": dishes,
             "everyday": {
-                currywurst,
-                drinks,
-                dessert
+                "currywurst": currywurst,
+                "drinks": drinks,
+                "dessert": dessert
             }
         }
 
         return data
 
-    @app.route('/', methods=['GET'])
-    def index():
-        menu = scrape()
-        return jsonify(menu)
 
-    # This function is to ping the backend every 5 minutes so spindown does not occur
-    def ping():
-        url = "https://scraper-usrk.onrender.com/"
+@app.route('/', methods=['GET'])
+def index():
+    menu = scrape()
+    return jsonify(menu)
 
-        while True:
-            try:
-                response = requests.get(url)
-                if response.status_code == 200:
-                    print("Ping successful!")
-                else:
-                    print("Ping failed.")
-            except requests.exceptions.RequestException:
-                print(f"Error while requesting the service.")
-            finally:
-                sleep(300)
 
-    if __name__ == '__main__':
-        thread = Thread(target=ping)
-        thread.start()
+# This function is to ping the backend every 5 minutes so spindown does not occur
+def ping():
+    url = "https://scraper-usrk.onrender.com/"
 
-        serve(app, host="0.0.0.0", port=8000)
+    while True:
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                print("Ping successful!")
+            else:
+                print("Ping failed.")
+        except requests.exceptions.RequestException:
+            print(f"Error while requesting the service.")
+        finally:
+            sleep(300)
+
+
+if __name__ == '__main__':
+    thread = Thread(target=ping)
+    thread.start()
+
+    serve(app, host="0.0.0.0", port=8000)
