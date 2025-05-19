@@ -15,7 +15,9 @@ def scrape():
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
+    # This will scrape the menu
     data = {}
+    food = {}
     days = soup.find_all("div", class_="tag_headline")
 
     for day in days:
@@ -184,9 +186,14 @@ def scrape():
         }
 
         # This will scrape the date
-        data[date] = {
+        food[date] = {
             "weekday": weekday,
             "dishes": dishes,
+        }
+
+        # Add the everyday stuff
+        data = {
+            "food": food,
             "everyday": {
                 "currywurst": currywurst,
                 "drinks": drinks,
@@ -194,7 +201,7 @@ def scrape():
             }
         }
 
-        return data
+    return data
 
 
 @app.route('/', methods=['GET'])
