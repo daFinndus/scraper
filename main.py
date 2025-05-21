@@ -86,20 +86,20 @@ def scrape():
         currywurst = {
             "dish": "Currywurst mit Pommes",
             "prices": {
-                "student": "2,80€",
-                "staff": "3,20€",
-                "guest": "3,50€"
+                "student": "5,30 €",
+                "staff": "5,30 €",
+                "guest": "5,30 €",
             },
             "contains": {
                 "vegan": False,
                 "vegetarian": False,
                 "pork": True,
-                "beef": False,
+                "beef": True,
                 "chicken": False,
                 "alcohol": False
             },
             "awards": {
-                "streetfood": True,
+                "streetfood": False,
                 "greenplate": False,
                 "studentrecipe": False
             }
@@ -107,49 +107,164 @@ def scrape():
 
         # These are all available drinks of the canteen
         drinks = {
-            "Warmgetränke": {
-                "Cappuccino": "2,10 €",
-                "Café Crema": "2,10 €",
-                "Filterkaffee": "1,40 €",
-                "Milchkaffee": "2,10 €",
-                "Latte Machhiato": "2,10 €",
-                "Espresso": "1,50 €",
-                "Heiße Schokolade": "1,70 €",
-                "Tee": "1,40 €",
-                "Heißes Wasser": "0,50 €",
-            },
-            "Kaltgetränke": {
-                "Waterkant Sturmflut (0.5 L)": "1,10 €",
-                "Waterkant Ebbe (0.5 L)": "1,10 €",
-                "Fritz Getränke (0.33 L)": "2,00 €",
-                "Waysa Green Original (0.33 L)": "2,00 €",
-                "Waysa White Apple (0.33 L)": "2,50 €",
-                "Erdinger Hefe Alkoholfrei (0.33 L)": "2,40 €",
-                "Wittenseer Blutorange (0.5 L)": "1,95 €",
-                "Flora Power Mate (0.5 L)": "2,50 €",
-                "Sinalco Getränke (0.5 L)": "1,55 €",
-                "Sprottenwasser (0.75 L)": "0.85 €",
-                "Mio Mio Getränke (0.5 L)": "1,90 € zz. Pfand (0.15 €)",
-                "AiTea Pfirsisch oder Zitrone (0.5 L)": "3,30 €",
-            }
+            "Warmgetraenke": [
+                {"name": "Cappuccino", "price": "2,10 €"},
+                {"name": "Café Crema", "price": "2,10 €"},
+                {"name": "Filterkaffee", "price": "1,40 €"},
+                {"name": "Milchkaffee", "price": "2,10 €"},
+                {"name": "Latte Machhiato", "price": "2,10 €"},
+                {"name": "Espresso", "price": "1,50 €"},
+                {"name": "Heiße Schokolade", "price": "1,70 €"},
+                {"name": "Tee", "price": "1,40 €"},
+                {"name": "Heißes Wasser", "price": "0,50 €"}
+            ],
+            "Kaltgetraenke": [
+                {"name": "Waterkant Sturmflut (0.5 L)", "price": "1,10 €"},
+                {"name": "Waterkant Ebbe (0.5 L)", "price": "1,10 €"},
+                {"name": "Fritz Getränke (0.33 L)", "price": "2,00 €"},
+                {"name": "Waysa Green Original (0.33 L)", "price": "2,00 €"},
+                {"name": "Waysa White Apple (0.33 L)", "price": "2,50 €"},
+                {"name": "Erdinger Hefe Alkoholfrei (0.33 L)", "price": "2,40 €"},
+                {"name": "Wittenseer Blutorange (0.5 L)", "price": "1,95 €"},
+                {"name": "Flora Power Mate (0.5 L)", "price": "2,50 €"},
+                {"name": "Sinalco Getränke (0.5 L)", "price": "1,55 €"},
+                {"name": "Sprottenwasser (0.75 L)", "price": "0,85 €"},
+                {"name": "Mio Mio Getränke (0.5 L)", "price": "1,90 € zz. Pfand (0.15 €)"},
+                {"name": "AiTea Pfirsisch oder Zitrone (0.5 L)", "price": "3,30 €"}
+            ]
         }
 
-        dessert = {
-            "Schokopudding mit Vanillesoße": "1,70 €",
-            "Vanille Joghurt": "2,20 €",
-            "Erdbeer-Fruchtjoghurt": "2,00 €",
-            "Milchreis": "2,10 €",
-            "Milchreis mit Roter Grütze": "2,30 €",
-            "Chiasamen-Kokos-Pudding": "2,30 €",
-            "Frischer Obstsalat": "2,60 €",
-            "Götterspeise Waldmeister oder Kirsche": {
+        dessert = [
+            {
+                "name": "Schokopudding mit Vanillesoße",
                 "prices": {
-                    "student": "1,40 €",
-                    "staff": "1,80 €",
-                    "guest": "2,10 €"
+                    "student": "1,70 €",
+                    "staff": "1,70 €",
+                    "guest": "1,70 €",
+                },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
                 }
             },
-            "Salted Caramel Pudding": {
+            {
+                "name": "Vanille Joghurt",
+                "prices": {
+                    "student": "2,20 €",
+                    "staff": "2,20 €",
+                    "guest": "2,20 €",
+                },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
+            },
+            {
+                "name": "Erdbeer-Fruchtjoghurt",
+                "prices": {
+                    "student": "2,00 €",
+                    "staff": "2,00 €",
+                    "guest": "2,00 €",
+                },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
+            },
+            {
+                "name": "Milchreis",
+                "prices": {
+                    "student": "2,10 €",
+                    "staff": "2,10 €",
+                    "guest": "2,10 €",
+                },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
+            },
+            {
+                "name": "Milchreis mit Roter Grütze",
+                "prices": {
+                    "student": "2,30 €",
+                    "staff": None,
+                    "guest": None
+                },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
+            },
+            {
+                "name": "Chiasamen-Kokos-Pudding",
+                "prices": {
+                    "student": "2,30 €",
+                    "staff": None,
+                    "guest": None
+                },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
+            },
+            {
+                "name": "Frischer Obstsalat",
+                "prices": {
+                    "student": "2,60 €",
+                    "staff": None,
+                    "guest": None
+                },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
+            },
+            {
+                "name": "Götterspeise Waldmeister oder Kirsche",
+                "prices": {
+                    "student": "1,40 €",
+                    "staff": "1,80 €",
+                    "guest": "2,10 €"
+                },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
+            },
+            {
+                "name": "Salted Caramel Pudding",
                 "prices": {
                     "student": "1,40 €",
                     "staff": "1,80 €",
@@ -157,9 +272,15 @@ def scrape():
                 },
                 "contains": {
                     "vegan": True,
-                },
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
             },
-            "Schokopudding": {
+            {
+                "name": "Schokopudding",
                 "prices": {
                     "student": "1,40 €",
                     "staff": "1,80 €",
@@ -167,23 +288,46 @@ def scrape():
                 },
                 "contains": {
                     "vegan": True,
-                },
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
             },
-            "Fruchtdessert Erdbeere": {
+            {
+                "name": "Fruchtdessert Erdbeere",
                 "prices": {
                     "student": "1,40 €",
                     "staff": "1,80 €",
                     "guest": "2,10 €"
                 },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
             },
-            "Sahnepudding Cheesecake": {
+            {
+                "name": "Sahnepudding Cheesecake",
                 "prices": {
                     "student": "1,40 €",
                     "staff": "1,80 €",
                     "guest": "2,10 €"
                 },
+                "contains": {
+                    "vegan": False,
+                    "vegetarian": False,
+                    "pork": False,
+                    "beef": False,
+                    "chicken": False,
+                    "alcohol": False
+                }
             }
-        }
+        ]
 
         # This will scrape the date
         food[date] = {
