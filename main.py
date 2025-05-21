@@ -107,7 +107,7 @@ def scrape():
 
         # These are all available drinks of the canteen
         drinks = {
-            "Warmgetraenke": [
+            "warmgetraenke": [
                 {"name": "Cappuccino", "price": "2,10 €"},
                 {"name": "Café Crema", "price": "2,10 €"},
                 {"name": "Filterkaffee", "price": "1,40 €"},
@@ -118,7 +118,7 @@ def scrape():
                 {"name": "Tee", "price": "1,40 €"},
                 {"name": "Heißes Wasser", "price": "0,50 €"}
             ],
-            "Kaltgetraenke": [
+            "kaltgetraenke": [
                 {"name": "Waterkant Sturmflut (0.5 L)", "price": "1,10 €"},
                 {"name": "Waterkant Ebbe (0.5 L)", "price": "1,10 €"},
                 {"name": "Fritz Getränke (0.33 L)", "price": "2,00 €"},
